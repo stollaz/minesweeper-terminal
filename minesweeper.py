@@ -244,6 +244,11 @@ def checkEnd(mineCount, start_time): # Function to check if the game has ended -
     if flaggedSafeCount > 0: # If some safe cells are incorrectly flagged, the game is not over, as you cannot have any safe cells marked to win
         return False
     elif revealedmineCount > 0: # If any mines have been revealed, the game is over and you lose
+        for i in range(WIDTH):
+            for j in range(HEIGHT):
+                board[i][j].reveal()
+        cls()
+        printBoard()
         print("{0}Mine Detonated. Game Over. {1}".format(colours.Bold + colours.Red, colours.White + colours.ResetBold))
         return True
     elif flaggedmineCount == mineCount: # Otherwise if the number of flagged mines equals the number of mines on the board, all mines are defused and you win
