@@ -17,6 +17,7 @@ MINECOUNT = 2*max(WIDTH,HEIGHT)
 LETTERS = [] # Stores the set of valid letters used when selecting a cell
 NUMBERS = [] # * for numbers
 
+# Class to store possible colours and text styles
 class colours:
     ResetAll = "\033[0m"
 
@@ -240,7 +241,7 @@ def checkEnd(mineCount): # Function to check if the game has ended - takes in th
     if flaggedSafeCount > 0: # If some safe cells are incorrectly flagged, the game is not over, as you cannot have any safe cells marked to win
         return False
     elif revealedmineCount > 0: # If any mines have been revealed, the game is over and you lose
-        print("{0}mine Detonated. Game Over. {1}".format(colours.Bold + colours.Red, colours.White + colours.ResetBold))
+        print("{0}Mine Detonated. Game Over. {1}".format(colours.Bold + colours.Red, colours.White + colours.ResetBold))
         return True
     elif flaggedmineCount == mineCount: # Otherwise if the number of flagged mines equals the number of mines on the board, all mines are defused and you win
         print("{0}All Mines Defused! You Win!. {1}".format(colours.Bold + colours.Green, colours.White + colours.ResetBold))
