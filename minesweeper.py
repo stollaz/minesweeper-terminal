@@ -314,6 +314,7 @@ def revealArea2(a,b):
 
 # Primary procedure to reveal an area around a cell, which starts the recursive part above
 def revealArea(y, col, area=2):
+    if y == str(y) or y == chr(y): y = int(ord(y) - 65)
     current = board[y][col]
 
     if current.type == "mine": current.reveal() # If the current cell is a mine, reveal it
@@ -340,6 +341,41 @@ def doAction(y, col, t):
     elif t == "clear": # Otherwise we are clearing a cell
         #board[y][col].reveal()
         revealArea(y, col) # Start the potentially recursive procedure on that cell
+
+def parseComplexAction(s):
+    separators = [':',',','.',' ','|']
+    actions = ["flag","clear","reveal_all","hide_all","f","c","help"]
+
+    if s == "help" or s == "reveal_all" or s == "hide_all": return True,0,0,s
+
+    separator = ''
+    action = ""
+    cell = ""
+
+    for sep in separators:
+        if s.find(sep) != -1: separator = sep
+
+    print("separator is '{0}'".format(separator))
+    splittext = s.split(str(separator))
+    #splittext = s.split(":")
+    if splittext[0].lower() in actions: action = splittext[0].lower()
+    elif splittext[1].lower() in actions: action = splittext[1].lower()
+    else:
+        print("Invalid action. Try again")
+        return False,0,0,0
+    if action == "f": action = "flag"
+    if action == "c": action = "clear"
+
+    if validateCell(splittext[1])[1]: cell = validateCell(splittext[1])[0]
+    elif validateCell(splittext[0])[1]: cell = validateCell(splittext[0])[0]
+    else:
+        print("Invalid cell. Try again")
+        return False,0,0,0
+
+    y, col = getParts(cell)
+
+    #doAction(y, col, action)
+    return True, y, col, action
 
 # Function to count the mines on the board (largely unecessary, as it should always equal the global MINECOUNT)
 def countmines():
@@ -447,34 +483,42 @@ def play():
     first = True
     while not end: # Loop until game over
         print("MINESWEEPER :: {0} mines -- {1} flags planted".format(countmines(), countFlags())) # Display how many mines there are, and how many flags are planted - note the two being equal does not mean game over
-        valid = False
-        while not valid: # Keep asking for a cell until a valid one is entered
-            c = input("Enter cell coordinates (e.g. F4) to play\n> ")
-            c, valid = validateCell(c)
-            if not valid: print("Invalid - try again")
+        
+        # valid = False
+        # while not valid: # Keep asking for a cell until a valid one is entered
+        #     c = input("Enter cell coordinates (e.g. F4) to play\n> ")
+        #     c, valid = validateCell(c)
+        #     if not valid: print("Invalid - try again")
             
+        # valid = False
+        # while not valid: # Keep asking for an action until a valid one is entered
+        #     t = input("Enter action to perform on cell {0}:\nActions: Flag, Clear, Help\n> ".format(c))
+        #     valid = validateAction(t)
+        #     if not valid: print("Invalid action - try again")
+        #     if t.lower() == "help": # Help text
+        #         print("\nFlag:  Add or remove a flag on a given cell, to mark it as being a mine\nClear: Clear a cell - if the cell is safe, information will be revealed.\n       If the cell is a mine, the game is over!\nIf you made a mistake, choose Flag, as this can be easily removed without penalty\n")
+        #         valid = False
+
+        # y, col = getParts(c)
+
         valid = False
-        while not valid: # Keep asking for an action until a valid one is entered
-            t = input("Enter action to perform on cell {0}:\nActions: Flag, Clear, Help\n> ".format(c))
-            valid = validateAction(t)
-            if not valid: print("Invalid action - try again")
-            if t.lower() == "help": # Help text
-                print("\nFlag:  Add or remove a flag on a given cell, to mark it as being a mine\nClear: Clear a cell - if the cell is safe, information will be revealed.\n       If the cell is a mine, the game is over!\nIf you made a mistake, choose Flag, as this can be easily removed without penalty\n")
+        while not valid:
+            p = input("Enter command (type 'help' for more info)\n> ")
+            valid,y,col,t = parseComplexAction(p)
+            if t == "help":
+                print("\nOn one line, type an action and a cell to perform the action upon.\nValid actions are: clear, flag, help\nA valid cell is a letter for the row and a number for the column, with no spaces between\nSome examples of valid commands include: 'clear D5', 'H7 flag','clear:a0', etc.\n\n")
                 valid = False
 
-        y, col = getParts(c)
-
         if first: # If this is the first go, ensure that the entered cell is safe and has no adjacent mines, to allow for the effect of clearing a large area as seen in normal minesweeper games
-            y = int(ord(y) - 65)
+            y_ = int(ord(y) - 65)
             #col = int(c[1])
             done = False
             while not done:
-                if board[y][col].type == "mine" or board[y][col].adjacentCount > 0: # If the entered cell is a mine or has adjacent bombs, reroll the board
+                if board[y_][col].type == "mine" or board[y_][col].adjacentCount > 0: # If the entered cell is a mine or has adjacent bombs, reroll the board
                     rerollBoard() 
                 else: done = True
             first = False
         
-        y, col = getParts(c)
         print("y={0},col={1}".format(y,col))
         doAction(y, col,t) # Perform the action
         
