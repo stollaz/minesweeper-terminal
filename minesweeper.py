@@ -356,7 +356,7 @@ def parseComplexAction(s):
     for sep in separators: # Loop through separators to find the valid one
         if s.find(sep) != -1: separator = sep
     if separator == '': # If no valid separator is found, display error
-        print("Invalid separator. Valid separators are as follows: {0}".format(separators))
+        print("Invalid separator. - use a valid separator to separate an action from a cell.\nValid separators are as follows: {0}".format(separators))
         return False,0,0,0
 
     splittext = s.split(str(separator)) # Split text around separator
