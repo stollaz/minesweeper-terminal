@@ -483,11 +483,11 @@ def menu():
 
 # Main function to play game 
 def play():
-    start_time = time.time()
     menu()
     cls()
     initBoard()
     printBoard()
+    start_time = time.time()
     end = False
     first = True
     while not end: # Loop until game over
