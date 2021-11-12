@@ -2,6 +2,7 @@
 # ⬤
 
 import re
+import time
 import random
 import sys
 sys.setrecursionlimit(1500) # Increase recursion limit so that clearing an area of the board is less likely to cause a stack overflow
@@ -228,7 +229,9 @@ def printBoard(): # Procedure to print the board out
     print("\n\n", end = '')
     return
 
-def checkEnd(mineCount): # Function to check if the game has ended - takes in the number of mines as a parameter
+def checkEnd(mineCount, start_time): # Function to check if the game has ended - takes in the number of mines as a parameter
+    end_time = time.time()
+    total_time = round(end_time - start_time)
     revealedmineCount = 0 # Keep track of how many mines are revealed
     flaggedmineCount = 0 # Keep track of how many mines are correctly flagged
     flaggedSafeCount = 0 # Keep track of how many safe cells are incorrectly flagged
@@ -244,7 +247,7 @@ def checkEnd(mineCount): # Function to check if the game has ended - takes in th
         print("{0}Mine Detonated. Game Over. {1}".format(colours.Bold + colours.Red, colours.White + colours.ResetBold))
         return True
     elif flaggedmineCount == mineCount: # Otherwise if the number of flagged mines equals the number of mines on the board, all mines are defused and you win
-        print("{0}All Mines Defused! You Win!. {1}".format(colours.Bold + colours.Green, colours.White + colours.ResetBold))
+        print("{0}All Mines Defused! You Win! Game Time: {2} seconds.{1}".format(colours.Bold + colours.Green, colours.White + colours.ResetBold, total_time))
         return True
     else: return False
 
@@ -480,6 +483,7 @@ def menu():
 
 # Main function to play game 
 def play():
+    start_time = time.time()
     menu()
     cls()
     initBoard()
@@ -529,6 +533,6 @@ def play():
         
         cls() # Clear the board and print it again, to avoid cluttering the terminal
         printBoard()
-        end = checkEnd(countmines()) # Check for the end
+        end = checkEnd(countmines(), start_time) # Check for the end
 
 play()
