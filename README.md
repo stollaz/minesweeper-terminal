@@ -9,3 +9,7 @@ Why? Why not
   - This is useful if e.g. you have a cell with 1 adjacent mine, and you have already flagged the mine, so you can reveal all surrounding cells without typing it all individually
   - e.g. `clearRadius`, `clearradius:c7` or something    
 - More comprehensive playtesting (there *must* be some bugs I missed during development
+
+### Bug Log
+- Games on a grid of 2x2 with any number of mines are bugged, as clearing any cell causes an infinite loop
+  - This does not seem to happen on larger grid sizes 
