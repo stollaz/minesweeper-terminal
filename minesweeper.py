@@ -365,22 +365,22 @@ def setupCustomGame():
     h = -1
     b = -1
     
-    while not 1 < w <= 26:
+    while not 2 < w <= 26:
         try:
             w = int(input("Enter WIDTH of board: "))
             if w > 26: print("Invalid Input - Number Too Large (Maximum size is 26). Try Again.")
-            elif w < 2: print("Invalid Input - Number Too Small (Minimum size is 2). Try Again.")
+            elif w < 3: print("Invalid Input - Number Too Small (Minimum size is 3). Try Again.")
         except:
             print("Invalid Input. Try Again.")
             w = -1
     
     print("Width set to {0}\n".format(w))
 
-    while not 1 < h <= 26:
+    while not 2 < h <= 26:
         try:
             h = int(input("Enter HEIGHT of board: "))
             if h > 26: print("Invalid Input - Number Too Large (Maximum size is 26). Try Again.")
-            elif h < 2: print("Invalid Input - Number Too Small (Minimum size is 2). Try Again.")
+            elif h < 3: print("Invalid Input - Number Too Small (Minimum size is 3). Try Again.")
         except:
             print("Invalid Input. Try Again.")
             h = -1
