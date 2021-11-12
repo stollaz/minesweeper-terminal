@@ -342,37 +342,39 @@ def doAction(y, col, t):
         #board[y][col].reveal()
         revealArea(y, col) # Start the potentially recursive procedure on that cell
 
+# Function to parse a complex action, which is an actiona and a cell on one line
 def parseComplexAction(s):
-    separators = [':',',','.',' ','|']
-    actions = ["flag","clear","reveal_all","hide_all","f","c","help"]
+    separators = [':',',','.',' ','|'] # Define valid separators
+    actions = ["flag","clear","reveal_all","hide_all","f","c","help"] # Define valid actions, with some shorthands such as "f" for "flag" and "c" for "clear"
 
-    if s == "help" or s == "reveal_all" or s == "hide_all": return True,0,0,s
+    if s == "help" or s == "reveal_all" or s == "hide_all": return True,0,0,s # If the action is help or a debug option, let it be valid
 
     separator = ''
     action = ""
     cell = ""
 
-    for sep in separators:
+    for sep in separators: # Loop through separators to find the valid one
         if s.find(sep) != -1: separator = sep
+    if separator == '': # If no valid separator is found, display error
+        print("Invalid separator. Valid separators are as follows: {0}".format(separators))
+        return False,0,0,0
 
-    print("separator is '{0}'".format(separator))
-    splittext = s.split(str(separator))
-    #splittext = s.split(":")
-    if splittext[0].lower() in actions: action = splittext[0].lower()
+    splittext = s.split(str(separator)) # Split text around separator
+    if splittext[0].lower() in actions: action = splittext[0].lower() # If the first part is the action store it as such, otherwise check 2nd part
     elif splittext[1].lower() in actions: action = splittext[1].lower()
-    else:
+    else: # If no Valid action found, display error
         print("Invalid action. Try again")
         return False,0,0,0
-    if action == "f": action = "flag"
+    if action == "f": action = "flag" # Convert shorthand actions to full versions
     if action == "c": action = "clear"
 
-    if validateCell(splittext[1])[1]: cell = validateCell(splittext[1])[0]
+    if validateCell(splittext[1])[1]: cell = validateCell(splittext[1])[0] # If the 2nd part is the cell, store it as such, otherwise check 1st part
     elif validateCell(splittext[0])[1]: cell = validateCell(splittext[0])[0]
     else:
         print("Invalid cell. Try again")
         return False,0,0,0
 
-    y, col = getParts(cell)
+    y, col = getParts(cell) # Get parts from cell data
 
     #doAction(y, col, action)
     return True, y, col, action
@@ -471,6 +473,9 @@ def menu():
             choice = -1
             cls()
             print("\nThe goal of minesweeper is to clear the board of all mines.\nThe numbers on revealed (blue) cells indicates the number of adjacent mines.\nUnrevealed cells are indicated in gray.\nThe game is won by marking all mines with a flag, as well having no non-mines flagged.\nClearing a safe cell reveals information, while clearing a mine is game over!\n")
+            print("When the game begins, actions are controlled by typing in the terminal.\nYou must type either a valid action followed by a cell reference, or a cell reference followed by an action.\nValid actions are currently: flag, clear, help\nValid cells are either the letter for the row followed by the number for the column, or vice versa.\nYou can separate the action and the cell with either a space, or one of the following characters: ',', '.', ':', '|'\n\nGood Luck!\n")
+            input("Press enter to continue")
+            cls()
         else: print("Invalid choice. Try again.")
 
 # Main function to play game 
