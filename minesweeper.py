@@ -115,7 +115,7 @@ def calculateAdjacentCount(i,j): # Function to calculate the number of mines adj
     for a in range (-1,2):
         for b in range (-1,2):
             if (i+a < HEIGHT and b+j < WIDTH and i+a >= 0 and b+j >= 0):
-                if board[i+a][j+b].type == "mine": count = count + 1
+                if board[i+a][j+b].type == "mine": count += 1
     return count
 
 board = [] # Initialise board as array
@@ -143,7 +143,7 @@ def rerollBoard(): # Procedure to reroll the board, mainly used at the start whe
 #         row = []
 #         for j in range (WIDTH):
 #             c = Cell()
-#             if c.type == "mine": mines = mines+1
+#             if c.type == "mine": mines += 1
 #             board[i][j] = c
 
 #     for i in range(HEIGHT):
@@ -165,7 +165,7 @@ def initBoard(): # Procedure to initialise the board with bombs
         row = []
         for j in range (WIDTH):
             c = Cell()
-            # if c.type == "mine": mines = mines+1
+            # if c.type == "mine": mines += 1
             board[i][j] = c
 
     while mines != MINECOUNT: # Randomly create mines at random cell locations
@@ -174,7 +174,7 @@ def initBoard(): # Procedure to initialise the board with bombs
         if board[i][j].type != "mine": # Ensure that cells are not selected mutliple times 
             board[i][j].type = "mine"
             #print("mine at ({0},{1})".format(i,j))
-            mines = mines + 1
+            mines += 1
 
     #print("{0} mines generated - countmines() = {1}".format(mines, countmines()))
     assert mines == countmines() # Assert that the number of mines created matches the number of mines found by the countmines() function
@@ -234,9 +234,9 @@ def checkEnd(mineCount): # Function to check if the game has ended - takes in th
     flaggedSafeCount = 0 # Keep track of how many safe cells are incorrectly flagged
     for i in range(HEIGHT): # Loop and increment relevant variables
         for j in range(WIDTH):
-            if board[i][j].type == "mine" and board[i][j].isVisible: revealedmineCount = revealedmineCount+1
-            elif board[i][j].type == "mine" and board[i][j].isFlagged: flaggedmineCount = flaggedmineCount+1
-            elif board[i][j].type == "safe" and board[i][j].isFlagged: flaggedSafeCount = flaggedSafeCount+1
+            if board[i][j].type == "mine" and board[i][j].isVisible: revealedmineCount += 1
+            elif board[i][j].type == "mine" and board[i][j].isFlagged: flaggedmineCount += 1
+            elif board[i][j].type == "safe" and board[i][j].isFlagged: flaggedSafeCount += 1
 
     if flaggedSafeCount > 0: # If some safe cells are incorrectly flagged, the game is not over, as you cannot have any safe cells marked to win
         return False
@@ -346,7 +346,7 @@ def countmines():
     count = 0
     for i in range(HEIGHT):
         for j in range(WIDTH):
-            if board[i][j].type == "mine": count = count+1
+            if board[i][j].type == "mine": count += 1
     return count
 
 # Function to count the number of flags on the board
@@ -354,7 +354,7 @@ def countFlags():
     count = 0
     for i in range(HEIGHT):
         for j in range(WIDTH):
-            if board[i][j].isFlagged: count = count+1
+            if board[i][j].isFlagged: count += 1
     return count
 
 # Procedure to allow setting up a game with custom size and number of mines
