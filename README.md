@@ -13,3 +13,6 @@ Why? Why not
 ### Bug Log
 - Games on a grid of 2x2 with any number of mines are bugged, as clearing any cell causes an infinite loop
   - This does not seem to happen on larger grid sizes 
+- Games on non-square grids don't seem to function properly when clearing
+  - On a game of width 10 and height 5, clearing a cell left borders with cells containing no adjacent mines, which is unintended
+  - This is likely due to arguments being the wrong way round when expanding the clearing
